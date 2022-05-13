@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Checkout extends javax.swing.JFrame {
     
+float Subtotal=0;
     CargarPropiedades p;
     String idAlimentos;
     String idBebidas;
@@ -35,9 +37,12 @@ public class Checkout extends javax.swing.JFrame {
     ComboAlimentos comboAli;
     ComboBebidas comboBeb;
     public Checkout() {
+        
         try{
+        
         p = new CargarPropiedades();
         fac = new Factura();
+        setIconImage(new ImageIcon(getClass().getResource("/edu/sv/ujmd/restaurante/icon/taco.png")).getImage());
         initComponents();
         setLocationRelativeTo(null);
         CargarTexto();
@@ -56,9 +61,12 @@ public class Checkout extends javax.swing.JFrame {
         this.lblChechkoutAlimento.setText(prop.getProperty("lblCheckoutAlimento"));
         this.lblCheckoutBebida.setText(prop.getProperty("lblCheckoutBebida"));
         this.lblCheckoutCantidad.setText(prop.getProperty("lblCheckoutCantidad"));
+        this.lblTituloCheckout.setText(prop.getProperty("lblTituloCheckout"));
         
         
     }
+
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,8 +86,11 @@ public class Checkout extends javax.swing.JFrame {
         txtCantidadBebidas = new javax.swing.JTextField();
         btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        txtSubtotal = new javax.swing.JTextField();
+        lblTituloCheckout = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Carrito de Compras");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -93,6 +104,11 @@ public class Checkout extends javax.swing.JFrame {
         lblCheckoutCantidad.setText(".");
 
         txtAlimentos.setEditable(false);
+        txtAlimentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAlimentosActionPerformed(evt);
+            }
+        });
 
         txtBebidas.setEditable(false);
 
@@ -114,37 +130,49 @@ public class Checkout extends javax.swing.JFrame {
             }
         });
 
+        txtSubtotal.setEditable(false);
+
+        lblTituloCheckout.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblTituloCheckout.setText(".");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnConfirmar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblCheckoutBebida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblChechkoutAlimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblChechkoutAlimento))
                         .addGap(74, 74, 74)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtAlimentos, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBebidas))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                            .addComponent(txtBebidas, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCantidadAlimentos, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(txtCantidadAlimentos)
                             .addComponent(txtCantidadBebidas)
-                            .addComponent(lblCheckoutCantidad))))
-                .addGap(33, 33, 33))
+                            .addComponent(lblCheckoutCantidad)
+                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(29, 29, 29))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(137, 137, 137)
+                .addComponent(lblTituloCheckout)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(38, 38, 38)
+                .addComponent(lblTituloCheckout)
+                .addGap(18, 18, 18)
                 .addComponent(lblCheckoutCantidad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -156,7 +184,9 @@ public class Checkout extends javax.swing.JFrame {
                     .addComponent(lblCheckoutBebida)
                     .addComponent(txtBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCantidadBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
+                .addGap(35, 35, 35)
+                .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar)
                     .addComponent(btnCancelar))
@@ -169,8 +199,8 @@ public class Checkout extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-                 
-                float Subtotal=0;
+
+                
                 
                 if(Integer.parseInt(idAlimentos)==1 && Integer.parseInt(idBebidas) ==1){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)5.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
@@ -178,32 +208,42 @@ public class Checkout extends javax.swing.JFrame {
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)5.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
                 }else if(Integer.parseInt(idAlimentos)==1 && Integer.parseInt(idBebidas) ==3){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)5.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
-                }else if(Integer.parseInt(idAlimentos)==1 && Integer.parseInt(idBebidas) ==4){
-                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)5.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.25);
                 }else if(Integer.parseInt(idAlimentos)==2 && Integer.parseInt(idBebidas) ==1){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
                 }else if(Integer.parseInt(idAlimentos)==2 && Integer.parseInt(idBebidas) ==2){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
                 }else if(Integer.parseInt(idAlimentos)==2 && Integer.parseInt(idBebidas) ==3){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
-                }else if(Integer.parseInt(idAlimentos)==2 && Integer.parseInt(idBebidas) ==4){
-                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.25);
                 }else if(Integer.parseInt(idAlimentos)==3 && Integer.parseInt(idBebidas) ==1){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)2.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
                 }else if(Integer.parseInt(idAlimentos)==3 && Integer.parseInt(idBebidas) ==2){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)2.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
                 }else if(Integer.parseInt(idAlimentos)==3 && Integer.parseInt(idBebidas) ==3){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)2.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
-                }else if(Integer.parseInt(idAlimentos)==3 && Integer.parseInt(idBebidas) ==4){
-                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)2.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.25);
                 }else if(Integer.parseInt(idAlimentos)==4 && Integer.parseInt(idBebidas) ==1){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
                 }else if(Integer.parseInt(idAlimentos)==4 && Integer.parseInt(idBebidas) ==2){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
                 }else if(Integer.parseInt(idAlimentos)==4 && Integer.parseInt(idBebidas) ==3){
                 Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
-                }else if(Integer.parseInt(idAlimentos)==4 && Integer.parseInt(idBebidas) ==4){
-                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.25);
+                }else if(Integer.parseInt(idAlimentos)==5 && Integer.parseInt(idBebidas) ==1){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.75)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
+                }else if(Integer.parseInt(idAlimentos)==5 && Integer.parseInt(idBebidas) ==2){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.75)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
+                }else if(Integer.parseInt(idAlimentos)==5 && Integer.parseInt(idBebidas) ==3){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)3.75)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
+                }else if(Integer.parseInt(idAlimentos)==6 && Integer.parseInt(idBebidas) ==1){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)4.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
+                }else if(Integer.parseInt(idAlimentos)==6 && Integer.parseInt(idBebidas) ==2){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)4.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
+                }else if(Integer.parseInt(idAlimentos)==6 && Integer.parseInt(idBebidas) ==3){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)4.25)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
+                }else if(Integer.parseInt(idAlimentos)==7 && Integer.parseInt(idBebidas) ==1){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)1.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)2.50);
+                }else if(Integer.parseInt(idAlimentos)==7 && Integer.parseInt(idBebidas) ==2){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)1.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.75);
+                }else if(Integer.parseInt(idAlimentos)==7 && Integer.parseInt(idBebidas) ==3){
+                Subtotal = (Integer.parseInt(txtCantidadAlimentos.getText())*(float)1.50)+(Integer.parseInt(txtCantidadBebidas.getText())*(float)1.00);
                 }
                 
                 String resultado = null;
@@ -219,8 +259,10 @@ public class Checkout extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
         
+        txtSubtotal.setText("$" + String.valueOf(Subtotal));
         txtAlimentos.setText(textAlimento);
         txtBebidas.setText(textBebida);
+        
         
         txtCantidadAlimentos.setText(CantidadAlimentos);
         txtCantidadBebidas.setText(CantidadBebidas);
@@ -232,6 +274,10 @@ public class Checkout extends javax.swing.JFrame {
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtAlimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlimentosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAlimentosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -274,9 +320,11 @@ public class Checkout extends javax.swing.JFrame {
     private javax.swing.JLabel lblChechkoutAlimento;
     private javax.swing.JLabel lblCheckoutBebida;
     private javax.swing.JLabel lblCheckoutCantidad;
+    private javax.swing.JLabel lblTituloCheckout;
     private javax.swing.JTextField txtAlimentos;
     private javax.swing.JTextField txtBebidas;
     private javax.swing.JTextField txtCantidadAlimentos;
     private javax.swing.JTextField txtCantidadBebidas;
+    private javax.swing.JTextField txtSubtotal;
     // End of variables declaration//GEN-END:variables
 }

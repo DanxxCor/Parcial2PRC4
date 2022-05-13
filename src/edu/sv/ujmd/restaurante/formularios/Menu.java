@@ -17,9 +17,11 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -27,7 +29,6 @@ import javax.swing.table.TableModel;
  */
 public class Menu extends javax.swing.JFrame {
 
-    
     String textoAlimento;
     String textoBebida;
     String cantidadAli;
@@ -58,9 +59,10 @@ public class Menu extends javax.swing.JFrame {
             beb = new Bebida();
             fac = new Factura();
             initComponents();
+            setIconImage(new ImageIcon(getClass().getResource("/edu/sv/ujmd/restaurante/icon/taco.png")).getImage());
             comboAli = new ComboAlimentos();
             comboBeb = new ComboBebidas();
-            
+
             setLocationRelativeTo(null);
             CargarTexto();
             CargarDatosLocal();
@@ -72,11 +74,11 @@ public class Menu extends javax.swing.JFrame {
     }
 
     public void CargarTexto() {
+        this.lblTitulo.setText(prop.getProperty("lblTitulo"));
         this.lblAlimentos.setText(prop.getProperty("lblAlimentos"));
         this.lblBebidas.setText(prop.getProperty("lblBebidas"));
         this.lblCantidad.setText(prop.getProperty("lblCantidad"));
-        
-        
+
     }
 
     public void CargarDatosLocal() {
@@ -92,7 +94,7 @@ public class Menu extends javax.swing.JFrame {
                 comboAli.setId(rs.getInt(1));
                 comboAli.setNombre(rs.getString(2));
                 comboAli.setPrecio(rs.getFloat(3));
-                modeloComboAli.addElement(comboAli.getId() + " - " + comboAli.getNombre() + " - " + comboAli.getPrecio());
+                modeloComboAli.addElement(comboAli.getId() + " - " + comboAli.getNombre() + " - $" + comboAli.getPrecio());
                 //  modeloCombo.addElement(new c_combo(rs.getInt(1),rs.getString(2)));
                 // jComboBox1.setModel(modeloCombo);
             }
@@ -100,7 +102,7 @@ public class Menu extends javax.swing.JFrame {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void llenarComboBebidas() {
         try {
             ResultSet rs = beb.llenarComboBebida();
@@ -110,7 +112,7 @@ public class Menu extends javax.swing.JFrame {
                 comboBeb.setId(rs.getInt(1));
                 comboBeb.setNombre(rs.getString(2));
                 comboBeb.setPrecio(rs.getFloat(3));
-                modeloComboBeb.addElement(comboBeb.getId() + " - " + comboBeb.getNombre() + " - " + comboBeb.getPrecio());
+                modeloComboBeb.addElement(comboBeb.getId() + " - " + comboBeb.getNombre() + " - $" + comboBeb.getPrecio());
                 //  modeloCombo.addElement(new c_combo(rs.getInt(1),rs.getString(2)));
                 // jComboBox1.setModel(modeloCombo);
             }
@@ -139,8 +141,11 @@ public class Menu extends javax.swing.JFrame {
         btnCheckout = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         lblcomboBeb = new javax.swing.JLabel();
+        btnHistorial = new javax.swing.JButton();
+        lblTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema Restaurante \"Los Tacos Hermanos\"");
 
         cboxAlimento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboxAlimento.addItemListener(new java.awt.event.ItemListener() {
@@ -187,72 +192,92 @@ public class Menu extends javax.swing.JFrame {
 
         lblcomboBeb.setText(".");
 
+        btnHistorial.setText("Historial de Compras");
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
+
+        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblTitulo.setText(".");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAlimentos)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(lblAlimentos))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addGap(2, 2, 2)
                         .addComponent(lblBebidas)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(153, 153, 153)
-                        .addComponent(lblCantidad)
-                        .addContainerGap(279, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(104, 104, 104)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblcomboBeb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblcomboAli, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(98, 98, 98)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblcomboAli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblcomboBeb))
+                        .addGap(98, 98, 98)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cboxAlimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cboxBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCantidadAli, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidadBeb, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCantidad))
+                        .addGap(160, 160, 160))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton4)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCheckout))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 230, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cboxBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboxAlimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(56, 56, 56)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtCantidadAli, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCantidadBeb, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(30, 30, 30))))
+                                .addComponent(btnCheckout)
+                                .addGap(35, 35, 35)
+                                .addComponent(btnHistorial))
+                            .addComponent(lblTitulo))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(lblCantidad)
+                .addGap(38, 38, 38)
+                .addComponent(lblTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboxAlimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblAlimentos)
-                    .addComponent(txtCantidadAli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblcomboAli))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBebidas)
-                    .addComponent(cboxBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCantidadBeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblcomboBeb))
-                .addGap(63, 63, 63)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblAlimentos)
+                            .addComponent(lblcomboAli))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBebidas)
+                            .addComponent(lblcomboBeb)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCantidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cboxAlimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidadAli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cboxBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidadBeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(3, 3, 3)))
+                .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCheckout)
-                    .addComponent(jButton4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton4)
+                    .addComponent(btnHistorial))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        btnCheckout.getAccessibleContext().setAccessibleName("Proceder a Carrito");
         btnCheckout.getAccessibleContext().setAccessibleDescription("");
 
         pack();
@@ -264,14 +289,14 @@ public class Menu extends javax.swing.JFrame {
         lblcomboAli.setText((String) cboxAlimento.getSelectedItem());
         textoAlimento = lblcomboAli.getText();
         idAli = lblcomboAli.getText();
-        
+
         idAli = idAli.substring(0, idAli.indexOf("-"));
         idAli = idAli.trim();
         lblcomboAli.setText(idAli);
         lblcomboAli.setText("id:" + idAli);
         indexComboAli = Integer.valueOf(idAli);
-        
-        
+
+
     }//GEN-LAST:event_cboxAlimentoItemStateChanged
 
     private void cboxAlimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxAlimentoActionPerformed
@@ -280,19 +305,19 @@ public class Menu extends javax.swing.JFrame {
 
     private void cboxBebidasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxBebidasItemStateChanged
         // TODO add your handling code here:
-        
+
         String alimento;
         lblcomboBeb.setText((String) cboxBebidas.getSelectedItem());
         textoBebida = lblcomboBeb.getText();
         idBeb = lblcomboBeb.getText();
-        
+
         idBeb = idBeb.substring(0, idBeb.indexOf("-"));
         idBeb = idBeb.trim();
         lblcomboBeb.setText(idBeb);
         lblcomboBeb.setText("id: " + idBeb);
         indexComboBeb = Integer.valueOf(idBeb);
-        
-        
+
+
     }//GEN-LAST:event_cboxBebidasItemStateChanged
 
     private void cboxBebidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxBebidasActionPerformed
@@ -300,9 +325,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_cboxBebidasActionPerformed
 
     private void btnCheckoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckoutActionPerformed
-        
-        
-        
+
 //        float Subtotal=0;
 //        Subtotal = (Integer.parseInt(txtCantidadAli.getText())*comboAli.getPrecio())+(Integer.parseInt(txtCantidadBeb.getText())*comboBeb.getPrecio());
 //        String resultado = null;
@@ -314,21 +337,26 @@ public class Menu extends javax.swing.JFrame {
 //            );
 //        JOptionPane.showMessageDialog(null, resultado);
 //    textoAlimento = modeloComboAli.getIndexOf(comboAli.getId());
-    
 //    
-    Checkout checkout = new Checkout();
-    checkout.setVisible(true);
-    
-    checkout.textAlimento=textoAlimento;
-    checkout.textBebida=textoBebida;
-    checkout.CantidadAlimentos=txtCantidadAli.getText();
-    checkout.CantidadBebidas=txtCantidadBeb.getText();
-    checkout.comboAli=comboAli;
-    checkout.comboBeb=comboBeb;
-    checkout.idAlimentos=idAli;
-    checkout.idBebidas=idBeb;
-    
+        Checkout checkout = new Checkout();
+        checkout.setVisible(true);
+
+        checkout.textAlimento = textoAlimento;
+        checkout.textBebida = textoBebida;
+        checkout.CantidadAlimentos = txtCantidadAli.getText();
+        checkout.CantidadBebidas = txtCantidadBeb.getText();
+        checkout.comboAli = comboAli;
+        checkout.comboBeb = comboBeb;
+        checkout.idAlimentos = idAli;
+        checkout.idBebidas = idBeb;
+
     }//GEN-LAST:event_btnCheckoutActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        // TODO add your handling code here:
+        Historial historial = new Historial();
+        historial.setVisible(true);
+    }//GEN-LAST:event_btnHistorialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -367,12 +395,14 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckout;
+    private javax.swing.JButton btnHistorial;
     public javax.swing.JComboBox<String> cboxAlimento;
     private javax.swing.JComboBox<String> cboxBebidas;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel lblAlimentos;
     private javax.swing.JLabel lblBebidas;
     private javax.swing.JLabel lblCantidad;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblcomboAli;
     private javax.swing.JLabel lblcomboBeb;
     private javax.swing.JTextField txtCantidadAli;
